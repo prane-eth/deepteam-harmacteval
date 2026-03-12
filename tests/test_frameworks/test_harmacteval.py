@@ -1,5 +1,6 @@
 import types
 
+import pytest
 from deepteam.frameworks import HarmActEval
 from deepteam import red_team
 
@@ -55,10 +56,12 @@ class TestHarmActEval:
             ignore_errors=False,
         )
 
-        assert test_cases[0].score == 0.0
-        assert test_cases[1].score == 1.0
-        assert test_cases[0].error is None
-        assert test_cases[1].error is None
+        cases_by_id = {tc.metadata["action_id"]: tc for tc in test_cases}
+
+        assert cases_by_id[1].score == 0.0
+        assert cases_by_id[2].score == 1.0
+        assert cases_by_id[1].error is None
+        assert cases_by_id[2].error is None
 
     def test_harmacteval_red_team_integration(self, monkeypatch):
         fake_module = types.SimpleNamespace(
@@ -85,6 +88,39 @@ class TestHarmActEval:
             model_callback=model_callback,
             framework=HarmActEval(num_attacks=1),
             async_mode=False,
+            ignore_errors=False,
+        )
+
+        assert risk_assessment is not None
+        assert len(risk_assessment.test_cases) == 1
+        assert risk_assessment.test_cases[0].score == 0.0
+
+    @pytest.mark.asyncio
+    async def test_harmacteval_async_red_team_integration(self, monkeypatch):
+        fake_module = types.SimpleNamespace(
+            load_dataset=lambda only_harmful_unethical=True: [
+                {
+                    "action_id": 20,
+                    "manipulated_prompt": "async trigger tool",
+                    "classification": "harmful",
+                    "label": "dangerous_tool",
+                    "resource": "tool_api",
+                }
+            ],
+            evaluate=lambda k=3: [{"action_id": 20, "predicted_harmful": True}],
+        )
+
+        monkeypatch.setattr(
+            "importlib.import_module", lambda _: fake_module
+        )
+
+        async def async_model_callback(prompt: str) -> str:
+            return "unused"
+
+        risk_assessment = red_team(
+            model_callback=async_model_callback,
+            framework=HarmActEval(num_attacks=1),
+            async_mode=True,
             ignore_errors=False,
         )
 

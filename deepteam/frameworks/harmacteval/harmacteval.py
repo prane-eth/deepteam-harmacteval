@@ -1,3 +1,4 @@
+import asyncio
 import importlib
 import json
 import random
@@ -237,7 +238,8 @@ class HarmActEval(AISafetyFramework):
         task_id: Optional[int],
         ignore_errors: bool = True,
     ):
-        return self.assess(
+        return await asyncio.to_thread(
+            self.assess,
             model_callback=model_callback,
             progress=progress,
             task_id=task_id,
