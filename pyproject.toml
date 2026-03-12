@@ -17,6 +17,15 @@ pyyaml = ">=6.0.2"
 requests = ">=2.31.0"
 tabulate = ">=0.9.0"
 tqdm = ">=4.66.1"
+agent-action-guard = {version = ">=1.0.1,<2.0.0", optional = true, extras = ["harmacteval"]}
+
+# Optional extras:
+# - The "harmacteval" extra enables evaluation features backed by `agent-action-guard`.
+# - Installing this extra may pull in heavyweight ML dependencies such as `torch`
+#   (and, on some Linux/x86_64 platforms, large CUDA runtime wheels).
+# Be aware of this footprint before installing via `pip install deepteam[harmacteval]`.
+[tool.poetry.extras]
+harmacteval = ["agent-action-guard"]
 
 [tool.poetry.group.dev.dependencies]
 black = ">=25.1.0"

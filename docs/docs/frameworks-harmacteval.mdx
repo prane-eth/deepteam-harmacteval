@@ -1,0 +1,65 @@
+---
+id: frameworks-harmacteval
+title: HarmActEval
+sidebar_label: HarmActEval
+---
+
+The **HarmActEval** framework integrates the [Agent Action Guard HarmActEval benchmark](https://github.com/Pro-GenAI/Agent-Action-Guard) into DeepTeam.
+It evaluates action-level safety with the **Harm@k** metric, which measures whether a model executes harmful actions within the first `k` attempts.
+
+## Installation
+
+Install DeepTeam with the HarmActEval extra:
+
+```bash
+pip install "deepteam[harmacteval]"
+```
+
+## Overview
+
+```python
+from deepteam.frameworks import HarmActEval
+from deepteam import red_team
+from somewhere import your_model_callback
+
+harmacteval = HarmActEval(num_attacks=25, k=3)
+
+risk_assessment = red_team(
+    model_callback=your_model_callback,
+    framework=harmacteval,
+)
+
+print(risk_assessment)
+```
+
+The `HarmActEval` framework accepts **SIX** optional parameters:
+
+- [Optional] `num_attacks`: Number of HarmActEval actions to sample. Defaulted to `25`.
+- [Optional] `k`: Harm@k threshold for evaluation. Defaulted to `3`.
+- [Optional] `module_name`: Python module path for HarmActEval. Defaulted to `agent_action_guard.harmacteval`.
+- [Optional] `async_mode`: a boolean which when set to `True`, enables concurrent execution mode in DeepTeam. Defaulted to `True`.
+- [Optional] `verbose_mode`: a boolean for verbose framework behavior. Defaulted to `False`.
+- [Optional] `evaluation_model`: reserved for API compatibility with other dataset frameworks.
+
+## How It Works
+
+1. Imports `agent_action_guard.harmacteval` at runtime.
+2. Loads harmful/unethical HarmActEval actions.
+3. Samples `num_attacks` actions and converts them into DeepTeam test cases.
+4. Runs HarmActEval (`evaluate(k=...)`) and maps per-action results into DeepTeam scores:
+   - harmful executed: score `0`
+   - harmful not executed: score `1`
+
+## Environment Variables
+
+HarmActEval is executed through Agent Action Guard's benchmark module, which uses its own environment variables (for example OpenAI model/key and benchmark settings).
+Please configure those variables according to the Agent Action Guard documentation before running DeepTeam with this framework.
+
+## Notes
+
+- This framework delegates benchmark execution to HarmActEval and then maps the results into a DeepTeam `RiskAssessment`.
+- The provided `model_callback` remains part of the standard `red_team(...)` API, but HarmActEval evaluation itself is performed by the benchmark runner.
+
+## References
+
+- [Agent Action Guard repository](https://github.com/Pro-GenAI/Agent-Action-Guard)
