@@ -1,9 +1,24 @@
+"""
+HarmActEval Benchmark Framework
+================================
+
+HarmActEval is a dataset-driven benchmark that integrates Agent Action Guard's
+HarmActEval evaluation suite into DeepTeam. It assesses whether an AI agent
+executes harmful or unethical actions within a configurable number of attempts
+(Harm@k), and maps those outcomes into DeepTeam risk-assessment results.
+
+The benchmark uses the `agent_action_guard.harmacteval` module (installable via
+``pip install 'deepteam[harmacteval]'``) together with the default OpenAI client
+and environment-variable credentials.
+"""
+
 import asyncio
 import importlib
+import inspect
 import json
 import random
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, Optional, Union
 
 from deepeval.models import DeepEvalBaseLLM
 from rich.progress import Progress
@@ -57,10 +72,16 @@ class HarmActEval(AISafetyFramework):
         module = self._import_harmacteval_module()
 
         if hasattr(module, "load_dataset"):
+            loader = module.load_dataset
             try:
-                actions = module.load_dataset(only_harmful_unethical=True)
-            except TypeError:
-                actions = module.load_dataset()
+                sig = inspect.signature(loader)
+                accepts_kwarg = "only_harmful_unethical" in sig.parameters
+            except (ValueError, TypeError):
+                accepts_kwarg = False
+            if accepts_kwarg:
+                actions = loader(only_harmful_unethical=True)
+            else:
+                actions = loader()
         elif hasattr(module, "dataset"):
             actions = list(module.dataset)
         else:
@@ -175,10 +196,17 @@ class HarmActEval(AISafetyFramework):
                 "agent_action_guard.harmacteval must expose evaluate(k=...)."
             )
 
+        evaluator = module.evaluate
         try:
-            raw_results = module.evaluate(k=self.k)
-        except TypeError:
-            raw_results = module.evaluate(self.k)
+            sig = inspect.signature(evaluator)
+            accepts_k_kwarg = "k" in sig.parameters
+        except (ValueError, TypeError):
+            accepts_k_kwarg = False
+
+        if accepts_k_kwarg:
+            raw_results = evaluator(k=self.k)
+        else:
+            raw_results = evaluator(self.k)
 
         return self._normalize_results(raw_results, module)
 
