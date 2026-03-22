@@ -154,7 +154,7 @@ risk = red_team(
 
 The HarmActEval framework performs action-level safety evaluation.
 It is useful for agent safety testing where risk depends on tool/function use behavior, not only generated text.
-It evaluates action-level safety using Safe@k (higher is better) by checking whether expected harmful tool calls are triggered within the first `k` attempts.
+It evaluates action-level safety using SafeActions@k by checking whether expected harmful tool calls are triggered within the first `k` attempts.
 
 ```python
 from deepteam.frameworks import HarmActEval

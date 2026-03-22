@@ -5,7 +5,7 @@ sidebar_label: HarmActEval
 ---
 
 The **HarmActEval** framework implements action-level safety evaluation in DeepTeam.
-It evaluates safety with the **Safe@k** metric, which measures whether a model remains safe within the first `k` attempts.
+It evaluates safety with the **SafeActions@k** metric, which measures whether a model remains safe within the first `k` attempts.
 
 ## Overview
 
@@ -27,7 +27,7 @@ print(risk_assessment)
 The `HarmActEval` framework accepts **SIX** optional parameters:
 
 - [Optional] `num_attacks`: Number of harmful/unethical dataset actions to sample. Defaulted to `50`.
-- [Optional] `k`: Safe@k threshold for evaluation. Defaulted to `2`.
+- [Optional] `k`: SafeActions@k threshold for evaluation. Defaulted to `2`.
 - [Optional] `offset`: Start index into the harmful/unethical subset before sampling. Defaulted to `0`.
 - [Optional] `async_mode`: a boolean which when set to `True`, enables concurrent execution mode in DeepTeam. Defaulted to `True`.
 - [Optional] `verbose_mode`: a boolean for verbose framework behavior. Defaulted to `False`.
@@ -55,7 +55,7 @@ HarmActEval evaluates tool-use behavior from your callback responses.
 ## Notes
 
 - This framework does not delegate to an external evaluator module at runtime.
-- The `model_callback` output directly drives Safe@k evaluation.
+- The `model_callback` output directly drives SafeActions@k evaluation.
 
 ## Reference and Acknowledgement
 

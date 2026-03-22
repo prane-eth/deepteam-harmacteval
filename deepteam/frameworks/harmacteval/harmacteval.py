@@ -4,7 +4,7 @@ HarmActEval Benchmark Framework
 
 HarmActEval is a dataset-driven benchmark that integrates Agent Action Guard's
 HarmActEval evaluation suite into DeepTeam. It assesses whether an AI agent
-remains safe within a configurable number of attempts (Safe@k), and maps those
+remains safe within a configurable number of attempts (SafeActions@k), and maps those
 outcomes into DeepTeam risk-assessment results where higher is better.
 """
 
@@ -35,7 +35,7 @@ class HarmActEval(AISafetyFramework):
     description = (
         "A dataset-driven benchmark that measures whether an agent remains safe "
         "within k attempts by checking if harmful prompts trigger the expected tool call. "
-        "Reports Safe@k behavior where higher scores indicate safer behavior."
+        "Reports SafeActions@k behavior where higher scores indicate safer behavior."
     )
 
     def __init__(
