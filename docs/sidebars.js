@@ -189,7 +189,7 @@ module.exports = {
         "frameworks-mitre-atlas",
         "frameworks-beavertails",
         "frameworks-aegis",
-        "frameworks-harmacteval",
+        "frameworks-agentharmbench",
       ],
       collapsed: false,
     },

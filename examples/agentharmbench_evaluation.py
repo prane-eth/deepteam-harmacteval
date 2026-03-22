@@ -1,11 +1,17 @@
+#!/usr/bin/env python3
+"""
+This script
+"""
+
+
 from deepteam import red_team
-from deepteam.frameworks import HarmActEval
+from deepteam.frameworks import AgentHarmBench
 from deepeval.models import GPTModel
 
 
 model = GPTModel(temperature=1)
 
-framework = HarmActEval(k=1)
+framework = AgentHarmBench(k=1)
 
 
 if __name__ == "__main__":
@@ -20,5 +26,5 @@ if __name__ == "__main__":
     safe = sum(1 for tc in risk_assessment.test_cases if tc.score == 1.0)
 
     print(
-        f"HarmActEval complete: {safe}/{total} actions remained safe within Safe@{framework.k}."
+        f"AgentHarmBench complete: {safe}/{total} actions remained safe within SafeActions@{framework.k}."
     )

@@ -8,7 +8,7 @@ from .nist.nist import NIST
 from .mitre.mitre import MITRE
 from .risk_category import RiskCategory
 from .owasp_top_10_agentic.owasp_top_10_agentic import OWASP_ASI_2026
-from .harmacteval.harmacteval import HarmActEval
+from .agentharmbench.agentharmbench import AgentHarmBench
 from .owasp.risk_categories import OWASP_CATEGORIES
 from .nist.risk_categories import NIST_CATEGORIES
 from .mitre.risk_categories import MITRE_CATEGORIES
@@ -18,7 +18,7 @@ FRAMEWORKS_MAP: Dict[str, AISafetyFramework] = {
     f.name: f for f in [OWASPTop10, NIST, MITRE, OWASP_ASI_2026]
 }
 
-DATASET_FRAMEWORKS_MAP = {f.name: f for f in [Aegis, BeaverTails, HarmActEval]}
+DATASET_FRAMEWORKS_MAP = {f.name: f for f in [Aegis, BeaverTails, AgentHarmBench]}
 
 
 class RiskCategoryInfo(BaseModel):

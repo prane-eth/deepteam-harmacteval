@@ -1,6 +1,6 @@
 import pytest
 
-from deepteam.frameworks import HarmActEval
+from deepteam.frameworks import AgentHarmBench
 from deepteam.test_case import RTTurn, ToolCall
 
 
@@ -10,9 +10,9 @@ def _tool_aware_turn(prompt: str, tools_called=None) -> RTTurn:
     return RTTurn(role="assistant", content=f"response:{prompt}", tools_called=tools_called)
 
 
-def test_harmacteval_load_dataset_filters_and_applies_offset(monkeypatch):
+def test_agentharmbench_load_dataset_filters_and_applies_offset(monkeypatch):
     monkeypatch.setattr(
-        HarmActEval,
+        AgentHarmBench,
         "_load_raw_dataset",
         lambda _: [
             {
@@ -47,7 +47,7 @@ def test_harmacteval_load_dataset_filters_and_applies_offset(monkeypatch):
     )
     monkeypatch.setattr("random.sample", lambda actions, k: actions[:k])
 
-    framework = HarmActEval(num_attacks=2, offset=1)
+    framework = AgentHarmBench(num_attacks=2, offset=1)
     framework.load_dataset()
 
     assert len(framework.test_cases) == 2
@@ -55,9 +55,9 @@ def test_harmacteval_load_dataset_filters_and_applies_offset(monkeypatch):
     assert loaded_ids == [12, 13]
 
 
-def test_harmacteval_assess_scores_by_expected_tool_call(monkeypatch):
+def test_agentharmbench_assess_scores_by_expected_tool_call(monkeypatch):
     monkeypatch.setattr(
-        HarmActEval,
+        AgentHarmBench,
         "_load_raw_dataset",
         lambda _: [
             {
@@ -78,7 +78,7 @@ def test_harmacteval_assess_scores_by_expected_tool_call(monkeypatch):
     )
     monkeypatch.setattr("random.sample", lambda actions, k: actions[:k])
 
-    framework = HarmActEval(num_attacks=2, k=2)
+    framework = AgentHarmBench(num_attacks=2, k=2)
     framework.load_dataset()
 
     call_count: dict[str, int] = {}
@@ -127,9 +127,9 @@ def test_harmacteval_assess_scores_by_expected_tool_call(monkeypatch):
 
 
 @pytest.mark.asyncio
-async def test_harmacteval_async_assess_scores_by_tool_call(monkeypatch):
+async def test_agentharmbench_async_assess_scores_by_tool_call(monkeypatch):
     monkeypatch.setattr(
-        HarmActEval,
+        AgentHarmBench,
         "_load_raw_dataset",
         lambda _: [
             {
@@ -142,7 +142,7 @@ async def test_harmacteval_async_assess_scores_by_tool_call(monkeypatch):
         ],
     )
     monkeypatch.setattr("random.sample", lambda actions, k: actions[:k])
-    framework = HarmActEval(num_attacks=1, k=2)
+    framework = AgentHarmBench(num_attacks=1, k=2)
     framework.load_dataset()
 
     async def _async_model_callback(prompt: str, turns=None, **kwargs) -> RTTurn:
@@ -176,11 +176,11 @@ async def test_harmacteval_async_assess_scores_by_tool_call(monkeypatch):
         ({"offset": -1}, "offset must be >= 0"),
     ],
 )
-def test_harmacteval_load_dataset_param_validation(
+def test_agentharmbench_load_dataset_param_validation(
     monkeypatch, kwargs, error_message
 ):
     monkeypatch.setattr(
-        HarmActEval,
+        AgentHarmBench,
         "_load_raw_dataset",
         lambda _: [
             {
@@ -213,14 +213,14 @@ def test_harmacteval_load_dataset_param_validation(
             },
         ],
     )
-    framework = HarmActEval(**kwargs)
+    framework = AgentHarmBench(**kwargs)
     with pytest.raises(ValueError, match=error_message):
         framework.load_dataset()
 
 
-def test_harmacteval_load_dataset_bounds_validation(monkeypatch):
+def test_agentharmbench_load_dataset_bounds_validation(monkeypatch):
     monkeypatch.setattr(
-        HarmActEval,
+        AgentHarmBench,
         "_load_raw_dataset",
         lambda _: [
             {
@@ -234,17 +234,17 @@ def test_harmacteval_load_dataset_bounds_validation(monkeypatch):
     )
 
     with pytest.raises(ValueError, match="offset is beyond"):
-        HarmActEval(num_attacks=1, offset=1).load_dataset()
+        AgentHarmBench(num_attacks=1, offset=1).load_dataset()
 
-    framework = HarmActEval(num_attacks=2)
+    framework = AgentHarmBench(num_attacks=2)
     test_cases = framework.load_dataset()
     assert len(test_cases) == 1
     assert framework.num_attacks == 1
 
 
-def test_harmacteval_assess_ignore_errors_sets_error(monkeypatch):
+def test_agentharmbench_assess_ignore_errors_sets_error(monkeypatch):
     monkeypatch.setattr(
-        HarmActEval,
+        AgentHarmBench,
         "_load_raw_dataset",
         lambda _: [
             {
@@ -257,7 +257,7 @@ def test_harmacteval_assess_ignore_errors_sets_error(monkeypatch):
         ],
     )
     monkeypatch.setattr("random.sample", lambda actions, k: actions[:k])
-    framework = HarmActEval(num_attacks=1)
+    framework = AgentHarmBench(num_attacks=1)
     framework.load_dataset()
 
     def broken_callback(prompt: str, turns=None, **kwargs) -> RTTurn:
@@ -276,13 +276,13 @@ def test_harmacteval_assess_ignore_errors_sets_error(monkeypatch):
     )
 
     assert len(test_cases) == 1
-    assert test_cases[0].error == "Error evaluating HarmActEval tool-call behavior"
+    assert test_cases[0].error == "Error evaluating AgentHarmBench tool-call behavior"
     assert test_cases[0].score == 0.0
 
 
-def test_harmacteval_assess_raises_when_ignore_errors_false(monkeypatch):
+def test_agentharmbench_assess_raises_when_ignore_errors_false(monkeypatch):
     monkeypatch.setattr(
-        HarmActEval,
+        AgentHarmBench,
         "_load_raw_dataset",
         lambda _: [
             {
@@ -295,7 +295,7 @@ def test_harmacteval_assess_raises_when_ignore_errors_false(monkeypatch):
         ],
     )
     monkeypatch.setattr("random.sample", lambda actions, k: actions[:k])
-    framework = HarmActEval(num_attacks=1)
+    framework = AgentHarmBench(num_attacks=1)
     framework.load_dataset()
 
     def broken_callback(prompt: str, turns=None, **kwargs) -> RTTurn:
@@ -316,8 +316,8 @@ def test_harmacteval_assess_raises_when_ignore_errors_false(monkeypatch):
 
 
 @pytest.mark.asyncio
-async def test_harmacteval_invoke_model_callback_requires_tool_kwargs_compatibility():
-    framework = HarmActEval(num_attacks=1)
+async def test_agentharmbench_invoke_model_callback_requires_tool_kwargs_compatibility():
+    framework = AgentHarmBench(num_attacks=1)
 
     def prompt_only_callback(prompt):
         return _tool_aware_turn(prompt)
@@ -334,8 +334,8 @@ async def test_harmacteval_invoke_model_callback_requires_tool_kwargs_compatibil
         )
 
 
-def test_harmacteval_build_tool_definition_infers_parameter_types():
-    framework = HarmActEval(num_attacks=1)
+def test_agentharmbench_build_tool_definition_infers_parameter_types():
+    framework = AgentHarmBench(num_attacks=1)
     definition = framework._build_tool_definition(
         {
             "label": "typed_tool",
@@ -362,8 +362,8 @@ def test_harmacteval_build_tool_definition_infers_parameter_types():
     assert set(params["required"]) == {"flag", "count", "ratio", "items", "name"}
 
 
-def test_harmacteval_did_call_target_tool_matches_case_insensitive():
-    framework = HarmActEval(num_attacks=1)
+def test_agentharmbench_did_call_target_tool_matches_case_insensitive():
+    framework = AgentHarmBench(num_attacks=1)
     calls = [ToolCall(name="DaNgErOuS_ToOl", input_parameters={})]
 
     assert framework._did_call_target_tool(calls, "dangerous_tool") is True

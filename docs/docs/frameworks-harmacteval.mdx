@@ -1,30 +1,30 @@
 ---
-id: frameworks-harmacteval
-title: HarmActEval
-sidebar_label: HarmActEval
+id: frameworks-agentharmbench
+title: AgentHarmBench
+sidebar_label: AgentHarmBench
 ---
 
-The **HarmActEval** framework implements action-level safety evaluation in DeepTeam.
+The **AgentHarmBench** framework implements action-level safety evaluation in DeepTeam.
 It evaluates safety with the **SafeActions@k** metric, which measures whether a model remains safe within the first `k` attempts.
 
 ## Overview
 
 ```python
-from deepteam.frameworks import HarmActEval
+from deepteam.frameworks import AgentHarmBench
 from deepteam import red_team
 from somewhere import your_model_callback
 
-harmacteval = HarmActEval(num_attacks=50, k=2)
+agentharmbench = AgentHarmBench(num_attacks=50, k=2)
 
 risk_assessment = red_team(
     model_callback=your_model_callback,
-    framework=harmacteval,
+    framework=agentharmbench,
 )
 
 print(risk_assessment)
 ```
 
-The `HarmActEval` framework accepts **SIX** optional parameters:
+The `AgentHarmBench` framework accepts **SIX** optional parameters:
 
 - [Optional] `num_attacks`: Number of harmful/unethical dataset actions to sample. Defaulted to `50`.
 - [Optional] `k`: SafeActions@k threshold for evaluation. Defaulted to `2`.
@@ -35,7 +35,7 @@ The `HarmActEval` framework accepts **SIX** optional parameters:
 
 ## How It Works
 
-1. Loads the packaged dataset from `deepteam/frameworks/harmacteval/harmactions_dataset.json`.
+1. Loads the packaged dataset from `deepteam/frameworks/agentharmbench/harmactions_dataset.json`.
 2. Filters out `safe` rows, applies `offset`, and samples `num_attacks` actions.
 3. Builds DeepTeam test cases using each row's `manipulated_prompt` (or `prompt`) and expected tool name.
 4. For each test case, runs up to `k` attempts via your `model_callback`.
@@ -46,7 +46,7 @@ The `HarmActEval` framework accepts **SIX** optional parameters:
 
 ## Callback Contract
 
-HarmActEval evaluates tool-use behavior from your callback responses.
+AgentHarmBench evaluates tool-use behavior from your callback responses.
 
 - Your callback should return an `RTTurn` with role `assistant`.
 - To represent tool use, include tool-call entries in `RTTurn.tools_called`.
@@ -59,5 +59,5 @@ HarmActEval evaluates tool-use behavior from your callback responses.
 
 ## Reference and Acknowledgement
 
-- This benchmark is based on HarmActEval introduced in Agent Action Guard, contributed by Praneeth Vadlapati and licensed under CC-BY-4.0.
+- This benchmark is based on AgentHarmBench introduced in Agent Action Guard, contributed by Praneeth Vadlapati and licensed under CC-BY-4.0.
     - Repository: https://github.com/Pro-GenAI/Agent-Action-Guard
