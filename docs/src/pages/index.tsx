@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import styles from './index.module.css';
 import LayoutProvider from '@theme/Layout/Provider';
 import Footer from '@theme/Footer';
@@ -36,7 +36,7 @@ class ConfidentEnvelope extends React.Component {
           <div className={styles.letterContentContainer}>
             <img src="icons/red-logo.svg" style={{width: "30px", height: "30px"}}/>
             <div className={styles.letterContext}>
-              <span class="lexend-deca" style={{fontSize: "16px"}}>Confident AI</span>
+              <span className="lexend-deca" style={{fontSize: "16px"}}>Confident AI</span>
             </div>
           </div>
           <div className={styles.letterStamp}>
@@ -54,7 +54,13 @@ class ConfidentEnvelope extends React.Component {
   }
 }
 
-class FeatureCard extends React.Component {
+interface FeatureCardProps {
+  title: string;
+  link: string;
+  description: string;
+}
+
+class FeatureCard extends React.Component<FeatureCardProps> {
   render() {
       const { title, link, description } = this.props;
 
@@ -68,7 +74,6 @@ class FeatureCard extends React.Component {
       );
   }
 }
-
 
 class Index extends React.Component {
   handleConfident = () => {
@@ -116,9 +121,7 @@ class Index extends React.Component {
     }
   }
 
-
-
-export default function (props) {
+export default function Home(props: any): ReactNode {
     return <LayoutProvider>
       <div className={styles.mainRapper}>
         <div className={styles.rapper}>

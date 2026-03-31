@@ -1,7 +1,12 @@
 import React from 'react';
 import styles from './ColabButton.module.css';
 
-const ColabButton = ({ notebookUrl, className }) => {
+interface ColabButtonProps {
+  notebookUrl: string;
+  className?: string;
+}
+
+const ColabButton: React.FC<ColabButtonProps> = ({ notebookUrl, className }) => {
   return (
     <a 
       href={notebookUrl} 

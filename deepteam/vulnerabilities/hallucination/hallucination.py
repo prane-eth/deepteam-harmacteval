@@ -1,5 +1,4 @@
 from typing import List, Literal, Optional, Union, Dict
-from enum import Enum
 import asyncio
 
 from deepeval.models import DeepEvalBaseLLM
@@ -7,69 +6,58 @@ from deepeval.metrics.utils import initialize_model, trimAndLoadJson
 from deepeval.utils import get_or_create_event_loop
 
 from deepteam.utils import validate_model_callback_signature
-
 from deepteam.vulnerabilities import BaseVulnerability
-from deepteam.metrics import BaseRedTeamingMetric, HarmMetric
+from deepteam.attacks.base_attack import Exploitability
+from deepteam.vulnerabilities.hallucination.types import HallucinationType
+from deepteam.vulnerabilities.utils import validate_vulnerability_types
+from deepteam.metrics import HallucinationMetric, BaseRedTeamingMetric
 from deepteam.attacks.multi_turn.types import CallbackType
+from deepteam.test_case import RTTestCase
 from deepteam.attacks.attack_simulator.schema import SyntheticDataList
 from deepteam.risks import getRiskCategory
-from deepteam.test_case import RTTestCase
-from .template import CustomVulnerabilityTemplate
+from .template import HallucinationTemplate
+
+HallucinationLiteralType = Literal[
+    "fake_citations",
+    "fake_apis",
+    "fake_entities",
+    "fake_statistics",
+]
 
 
-class CustomVulnerability(BaseVulnerability):
-    """
-    Custom vulnerability class that allows users to define their own vulnerability types.
-    """
+class Hallucination(BaseVulnerability):
+    name: str = "Hallucination"
+    description = "Confident fabrication of non-existent sources, APIs, entities, or statistics that mislead users into trusting false information."
+    ALLOWED_TYPES = [type.value for type in HallucinationType]
 
     def __init__(
         self,
-        name: str,
-        criteria: str,
-        types: Optional[List[str]] = None,
-        custom_prompt: Optional[str] = None,
         async_mode: bool = True,
         verbose_mode: bool = False,
         simulator_model: Optional[
             Union[str, DeepEvalBaseLLM]
         ] = "gpt-3.5-turbo-0125",
         evaluation_model: Optional[Union[str, DeepEvalBaseLLM]] = "gpt-4o",
+        types: Optional[List[HallucinationLiteralType]] = [
+            type.value for type in HallucinationType
+        ],
+        purpose: Optional[str] = None,
     ):
-        self.name = name
-
-        if types:
-            self.types = Enum(
-                f"CustomVulnerabilityType", {t.upper(): t for t in types}
-            )
-        else:
-            # Default to a single type derived from the vulnerability name
-            # so iteration over self.types always works
-            self.types = Enum(
-                f"CustomVulnerabilityType",
-                {name.upper().replace(" ", "_"): name},
-            )
-
-        self.custom_prompt = custom_prompt
-        self.criteria = criteria.strip()
-        self.simulator_model = simulator_model
-        self.evaluation_model = evaluation_model
+        enum_types = validate_vulnerability_types(
+            self.get_name(), types=types, allowed_type=HallucinationType
+        )
         self.async_mode = async_mode
         self.verbose_mode = verbose_mode
-        self.metric = None
-        super().__init__(self.types)
-
-    def get_name(self) -> str:
-        return self.name
-
-    def get_custom_prompt(self) -> Optional[str]:
-        return self.custom_prompt
+        self.simulator_model = simulator_model
+        self.evaluation_model = evaluation_model
+        self.purpose = purpose
+        super().__init__(types=enum_types)
 
     def assess(
         self,
         model_callback: CallbackType,
         purpose: Optional[str] = None,
-    ) -> Dict[Enum, List[RTTestCase]]:
-
+    ) -> Dict[HallucinationType, List[RTTestCase]]:
         validate_model_callback_signature(
             model_callback=model_callback,
             async_mode=self.async_mode,
@@ -78,16 +66,13 @@ class CustomVulnerability(BaseVulnerability):
         if self.async_mode:
             loop = get_or_create_event_loop()
             return loop.run_until_complete(
-                self.a_assess(
-                    model_callback=model_callback,
-                    purpose=purpose,
-                )
+                self.a_assess(model_callback=model_callback, purpose=purpose)
             )
 
         simulated_test_cases = self.simulate_attacks(purpose)
 
-        results: Dict[Enum, List[RTTestCase]] = {}
-        res: Dict[Enum, BaseRedTeamingMetric] = {}
+        results: Dict[HallucinationType, List[RTTestCase]] = {}
+        res: Dict[HallucinationType, HallucinationMetric] = {}
         simulated_attacks: Dict[str, str] = {}
 
         for test_case in simulated_test_cases:
@@ -125,7 +110,7 @@ class CustomVulnerability(BaseVulnerability):
         self,
         model_callback: CallbackType,
         purpose: Optional[str] = None,
-    ) -> Dict[Enum, List[RTTestCase]]:
+    ) -> Dict[HallucinationType, List[RTTestCase]]:
         validate_model_callback_signature(
             model_callback=model_callback,
             async_mode=self.async_mode,
@@ -133,8 +118,8 @@ class CustomVulnerability(BaseVulnerability):
 
         simulated_test_cases = await self.a_simulate_attacks(purpose)
 
-        results: Dict[Enum, List[RTTestCase]] = {}
-        res: Dict[Enum, BaseRedTeamingMetric] = {}
+        results: Dict[HallucinationType, List[RTTestCase]] = {}
+        res: Dict[HallucinationType, HallucinationMetric] = {}
         simulated_attacks: Dict[str, str] = {}
 
         async def process_attack(test_case: RTTestCase):
@@ -180,28 +165,23 @@ class CustomVulnerability(BaseVulnerability):
 
     def simulate_attacks(
         self,
-        purpose: str = None,
+        purpose: Optional[str] = None,
         attacks_per_vulnerability_type: int = 1,
     ) -> List[RTTestCase]:
-
-        self.purpose = purpose
 
         self.simulator_model, self.using_native_model = initialize_model(
             self.simulator_model
         )
 
+        self.purpose = purpose
         templates = dict()
         simulated_test_cases: List[RTTestCase] = []
 
         for type in self.types:
             templates[type] = templates.get(type, [])
             templates[type].append(
-                CustomVulnerabilityTemplate.generate_baseline_attacks(
-                    self.name,
-                    type,
-                    attacks_per_vulnerability_type,
-                    self.custom_prompt,
-                    self.purpose,
+                HallucinationTemplate.generate_baseline_attacks(
+                    type, attacks_per_vulnerability_type, self.purpose
                 )
             )
 
@@ -238,28 +218,23 @@ class CustomVulnerability(BaseVulnerability):
 
     async def a_simulate_attacks(
         self,
-        purpose: str = None,
+        purpose: Optional[str] = None,
         attacks_per_vulnerability_type: int = 1,
     ) -> List[RTTestCase]:
-
-        self.purpose = purpose
 
         self.simulator_model, self.using_native_model = initialize_model(
             self.simulator_model
         )
 
+        self.purpose = purpose
         templates = dict()
         simulated_test_cases: List[RTTestCase] = []
 
         for type in self.types:
             templates[type] = templates.get(type, [])
             templates[type].append(
-                CustomVulnerabilityTemplate.generate_baseline_attacks(
-                    self.name,
-                    type,
-                    attacks_per_vulnerability_type,
-                    self.custom_prompt,
-                    self.purpose,
+                HallucinationTemplate.generate_baseline_attacks(
+                    type, attacks_per_vulnerability_type, self.purpose
                 )
             )
 
@@ -296,15 +271,16 @@ class CustomVulnerability(BaseVulnerability):
 
         return simulated_test_cases
 
-    def _get_metric(self, type: Enum) -> BaseRedTeamingMetric:
-        if self.metric is None:
-            self.metric = HarmMetric(
-                harm_category=self.criteria,
-                model=self.evaluation_model,
-                async_mode=self.async_mode,
-                verbose_mode=self.verbose_mode,
-            )
-        return self.metric
+    def _get_metric(
+        self,
+        type: HallucinationType,
+    ) -> BaseRedTeamingMetric:
+        return HallucinationMetric(
+            purpose=self.purpose,
+            model=self.evaluation_model,
+            async_mode=self.async_mode,
+            verbose_mode=self.verbose_mode,
+        )
 
     def is_vulnerable(self) -> bool:
         self.vulnerable = False
@@ -316,5 +292,5 @@ class CustomVulnerability(BaseVulnerability):
             self.vulnerable = False
         return self.vulnerable
 
-    def get_criteria(self) -> str:
-        return self.criteria
+    def get_name(self) -> str:
+        return self.name

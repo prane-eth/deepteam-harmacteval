@@ -1,7 +1,19 @@
 import React from "react";
 import styles from "./GuardTagsDisplayer.module.css";
 
-const GuardTagsDisplayer = ({ singleTurn=false, usesLLMs=false, input=false, output=false }) => {
+interface GuardTagsDisplayerProps {
+  singleTurn?: boolean;
+  usesLLMs?: boolean;
+  input?: boolean;
+  output?: boolean;
+}
+
+const GuardTagsDisplayer: React.FC<GuardTagsDisplayerProps> = ({ 
+  singleTurn = false, 
+  usesLLMs = false, 
+  input = false, 
+  output = false 
+}) => {
   return (
     <div className={styles.tagsDisplayer}>
       {singleTurn && <div className={`${styles.pill} ${styles.singleTurn}`}>Single-turn</div>}
@@ -12,4 +24,4 @@ const GuardTagsDisplayer = ({ singleTurn=false, usesLLMs=false, input=false, out
   );
 };
 
-export default GuardTagsDisplayer; 
+export default GuardTagsDisplayer;

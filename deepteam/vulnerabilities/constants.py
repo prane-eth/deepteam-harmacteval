@@ -86,6 +86,8 @@ from .exploit_tool_agent.types import ExploitToolAgentType
 from .external_system_abuse.types import ExternalSystemAbuseType
 from .cross_context_retrieval.types import CrossContextRetrievalType
 from .system_reconnaissance.types import SystemReconnaissanceType
+from .hallucination.hallucination import Hallucination
+from .hallucination.types import HallucinationType
 
 VULNERABILITY_CLASSES_MAP: Dict[str, BaseVulnerability] = {
     v.name: v
@@ -122,6 +124,7 @@ VULNERABILITY_CLASSES_MAP: Dict[str, BaseVulnerability] = {
         ExternalSystemAbuse,
         CrossContextRetrieval,
         SystemReconnaissance,
+        Hallucination,
     ]
 }
 

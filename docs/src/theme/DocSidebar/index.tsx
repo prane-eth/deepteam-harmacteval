@@ -1,11 +1,12 @@
-import React from 'react';
+import React, {type ReactNode} from 'react';
 import { useWindowSize } from '@docusaurus/theme-common';
 import DocSidebarDesktop from '@theme/DocSidebar/Desktop';
 import DocSidebarMobile from '@theme/DocSidebar/Mobile';
 import SearchBar from '@theme/SearchBar';
+import type {Props} from '@theme/DocSidebar';
 import styles from './styles.module.scss';
 
-export default function DocSidebar(props) {
+export default function DocSidebar(props: Props): ReactNode {
   const windowSize = useWindowSize();
 
   const shouldRenderSidebarDesktop =

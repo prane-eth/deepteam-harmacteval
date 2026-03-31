@@ -1,6 +1,7 @@
-import React from 'react';
+import React, {type ReactNode} from 'react';
 import clsx from 'clsx';
 import TOCItems from '@theme/TOCItems';
+import type {Props} from '@theme/TOC';
 import styles from './styles.module.scss';
 
 // Using a custom className
@@ -8,7 +9,7 @@ import styles from './styles.module.scss';
 const LINK_CLASS_NAME = 'table-of-contents__link toc-highlight';
 const LINK_ACTIVE_CLASS_NAME = 'table-of-contents__link--active';
 
-export default function TOC({ className, ...props }) {
+export default function TOC({ className, ...props }: Props): ReactNode {
   return (
     <div className={clsx(styles.tableOfContents, className)}>
       {/* Scrollable container for TOC items */}

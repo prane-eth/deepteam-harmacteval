@@ -1,7 +1,21 @@
 import React from "react";
 import styles from "./AttackTagsDisplayer.module.css";
 
-const AttackTagsDisplayer = ({ multiTurn=false, singleTurn=false, encodingBased=false, llmSimulated=false, custom=false }) => {
+interface AttackTagsDisplayerProps {
+  multiTurn?: boolean;
+  singleTurn?: boolean;
+  encodingBased?: boolean;
+  llmSimulated?: boolean;
+  custom?: boolean;
+}
+
+const AttackTagsDisplayer: React.FC<AttackTagsDisplayerProps> = ({ 
+  multiTurn = false, 
+  singleTurn = false, 
+  encodingBased = false, 
+  llmSimulated = false, 
+  custom = false 
+}) => {
   return (
     <div className={styles.tagsDisplayer}>
       {multiTurn && <div className={`${styles.pill} ${styles.multiTurn}`}>Multi-turn</div>}

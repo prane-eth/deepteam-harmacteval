@@ -1,7 +1,13 @@
 import React from "react";
 import styles from "./VideoDisplayer.module.css";
 
-const VideoDisplayer = ({ src, confidentUrl, label }) => {
+interface VideoDisplayerProps {
+  src: string;
+  confidentUrl: string;
+  label: string;
+}
+
+const VideoDisplayer: React.FC<VideoDisplayerProps> = ({ src, confidentUrl, label }) => {
   return (
     <div className={styles.videoContainer}>
       <video width="100%" muted controls playsInline controlsList="nodownload">

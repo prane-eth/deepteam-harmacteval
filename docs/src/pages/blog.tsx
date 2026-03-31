@@ -1,13 +1,42 @@
-import React from "react";
+import React, { type ReactNode } from "react";
 import styles from "./blog.module.css";
 import LayoutProvider from "@theme/Layout/Provider";
 import Footer from "@theme/Footer";
 import Navbar from "@theme/Navbar";
 import Link from "@docusaurus/Link";
+import SchemaInjector from "../components/SchemaInjector/SchemaInjector";
+import { buildBlogHomeSchema } from "@site/src/utils/schema-helpers";
 
+interface AuthorData {
+  name: string;
+  title: string;
+  url: string;
+  image_url: string;
+}
 
-class BlogCard extends React.Component {
-  formatDate(dateString) {
+interface AuthorsMap {
+  [key: string]: AuthorData;
+}
+
+interface Blog {
+  title: string;
+  description: string;
+  slug: string;
+  authors: string[];
+  date: string;
+}
+
+interface BlogCardProps {
+  title: string;
+  description: string;
+  date: string;
+  authors: string[];
+  slug: string;
+  authorsData: AuthorsMap;
+}
+
+class BlogCard extends React.Component<BlogCardProps> {
+  formatDate(dateString: string): string {
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', {
       year: 'numeric',
@@ -16,16 +45,7 @@ class BlogCard extends React.Component {
     });
   }
 
-  formatAuthors(authors, authorsData) {
-    if (!authors || authors.length === 0) return 'Anonymous';
-    
-    return authors.map(authorKey => {
-      const author = authorsData[authorKey];
-      return author ? author.name : authorKey;
-    }).join(', ');
-  }
-
-  renderAuthors(authors, authorsData) {
+  renderAuthors(authors: string[], authorsData: AuthorsMap): ReactNode {
     if (!authors || authors.length === 0) {
       return <span className={styles.author}>Anonymous</span>;
     }
@@ -49,7 +69,7 @@ class BlogCard extends React.Component {
     });
   }
 
-  render() {
+  render(): ReactNode {
     const { title, description, date, authors, slug, authorsData } = this.props;
     const blogUrl = `/blog/${slug}`;
 
@@ -74,8 +94,15 @@ class BlogCard extends React.Component {
   }
 }
 
-class Index extends React.Component {
-  constructor(props) {
+interface IndexState {
+  blogs: Blog[];
+  authors: AuthorsMap;
+  loading: boolean;
+  error: string | null;
+}
+
+class Index extends React.Component<Record<string, unknown>, IndexState> {
+  constructor(props: Record<string, unknown>) {
     super(props);
     this.state = {
       blogs: [],
@@ -85,10 +112,9 @@ class Index extends React.Component {
     };
   }
 
-  async componentDidMount() {
+  async componentDidMount(): Promise<void> {
     try {
-      // Simulate loading blog data (in a real app, this would be from a CMS or markdown files)
-      const blogData = [
+      const blogData: Blog[] = [
         {
           title: "Breaking Gemini 2.5 Pro using DeepTeam",
           description: "An in-depth analysis of Gemini 2.5 Pro's vulnerabilities using DeepTeam, revealing how different attack strategies can bypass AI safety measures",
@@ -126,7 +152,7 @@ class Index extends React.Component {
         }
       ];
 
-      const authorsData = {
+      const authorsData: AuthorsMap = {
         penguine: {
           name: "Penguine",
           title: "DeepTeam Wizard",
@@ -147,8 +173,7 @@ class Index extends React.Component {
         }
       };
 
-      // Sort blogs by date (newest first)
-      const sortedBlogs = blogData.sort((a, b) => new Date(b.date) - new Date(a.date));
+      const sortedBlogs = blogData.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
       this.setState({
         blogs: sortedBlogs,
@@ -163,11 +188,14 @@ class Index extends React.Component {
     }
   }
 
-  render() {
+  render(): ReactNode {
     const { blogs, authors, loading, error } = this.state;
+
+    const blogHomeSchema = blogs.length > 0 ? buildBlogHomeSchema(blogs) : null;
 
     return (
       <div className={styles.blogHomeContainer}>
+        {blogHomeSchema && <SchemaInjector schema={blogHomeSchema} />}
         <div className={styles.blogHeroCard}>
           <div className={styles.content}>
             <span className={styles.tag}>Blog</span>
@@ -226,7 +254,7 @@ class Index extends React.Component {
   }
 }
 
-export default function (props) {
+export default function BlogHome(props: Record<string, unknown>): ReactNode {
   return (
     <LayoutProvider>
       <Navbar />
