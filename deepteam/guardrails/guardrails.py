@@ -1,4 +1,4 @@
-from typing import List, Any, Optional
+from typing import List, Any, Optional, Callable
 import time
 import asyncio
 from typing import Literal
@@ -52,6 +52,8 @@ class Guardrails:
         output_guards: List[BaseGuard],
         evaluation_model: str = "gpt-4.1",
         sample_rate: float = 1.0,
+        tool_input_guards: Optional[List[Callable[[Any, str], bool]]] = None,
+        tool_output_guards: Optional[List[Callable[[Any, Any, str], bool]]] = None,
     ):
         """
         Initialize Guardrails with separate input and output guards.
@@ -71,6 +73,8 @@ class Guardrails:
         self.sample_rate = sample_rate
         self.evaluation_model = evaluation_model
         self._request_count = 0
+        self.tool_input_guards = tool_input_guards or []
+        self.tool_output_guards = tool_output_guards or []
 
         # Update all guards to use the specified evaluation model
         self.input_guards = self._update_guards_model(
@@ -93,6 +97,46 @@ class Guardrails:
             guard.evaluation_model = guard.model.get_model_name()
 
         return guards
+
+    def guard_tool_call(self, tool_call_data: Any, agent_name: str) -> bool:
+        """
+        Guard a tool call using the configured tool_input_guards.
+        Returns True to allow the call, False to block it.
+        """
+        if not self.tool_input_guards:
+            # If no guards are configured, default to allowing the tool call
+            return True
+            
+        for guard in self.tool_input_guards:
+            try:
+                allowed = guard(tool_call_data, agent_name)
+                if not allowed:
+                    return False
+            except Exception:
+                # On error, default to blocking the tool call
+                return False
+                
+        return True
+
+    def guard_tool_output(self, tool_call_data: Any, tool_output_data: Any, agent_name: str) -> bool:
+        """
+        Guard a tool output using the configured tool_output_guards.
+        Returns True to allow the output, False to block it.
+        """
+        if not self.tool_output_guards:
+            # If no guards are configured, default to allowing the tool output
+            return True
+            
+        for guard in self.tool_output_guards:
+            try:
+                allowed = guard(tool_call_data, tool_output_data, agent_name)
+                if not allowed:
+                    return False
+            except Exception:
+                # On error, default to blocking the tool output
+                return False
+                
+        return True
 
     def _should_process(self) -> bool:
         """Deterministic sampling: exactly sample_rate fraction of requests"""

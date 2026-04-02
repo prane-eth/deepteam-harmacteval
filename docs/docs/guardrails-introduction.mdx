@@ -69,6 +69,8 @@ There are **TWO** mandatory and **TWO** optional parameters when creating a `Gua
 - `output_guards`: a list of output guards for evaluating LLM outputs
 - [Optional] `evaluation_model`: a string specifying which OpenAI model to use for guard evaluation. Defaulted to `gpt-4.1`.
 - [Optional] `sample_rate`: a float between 0.0 and 1.0 that determines what fraction of requests are guarded. Defaulted to `1.0`.
+- [Optional] `tool_input_guards`: a list of callable functions, where each receives tool call data and an agent name, and returns `True` to allow or `False` to block a tool call.
+- [Optional] `tool_output_guards`: a list of callable functions, where each receives tool call data, tool output data, and an agent name, and returns `True` to allow or `False` to block a tool output.
 
 ```python
 # Advanced configuration
@@ -114,6 +116,64 @@ It is extremely common to be re-generated LLM outputs for _x_ number of times un
 :::note
 When using the `guard_output()` method, you must provide both the `input` and the LLM `output`.
 :::
+
+### Guard a Tool Call
+
+If you're building an agentic application using tool calls, you can configure `tool_input_guards`. First provide the list of functions to the `Guardrails` constructor:
+
+```python
+def my_tool_input_guard(tool_call_data, agent_name) -> bool:
+    if agent_name == "admin-agent":
+        return True
+    return False
+
+# Initialize guardrails
+guardrails = Guardrails(
+  input_guards=[PromptInjectionGuard()],
+  output_guards=[ToxicityGuard()],
+  tool_input_guards=[my_tool_input_guard]
+)
+```
+
+Then you can enforce it using `guard_tool_call`:
+
+```python
+# Returns True to allow, False to block
+allowed = guardrails.guard_tool_call(tool_call_data={"tool": "delete_db"}, agent_name="user-agent")
+if not allowed:
+    print("Blocked tool call!")
+```
+
+### Guard a Tool Output
+
+Similarly, you can configure `tool_output_guards` to evaluate the result of a tool execution.
+
+```python
+def my_tool_output_guard(tool_call_data, tool_output_data, agent_name) -> bool:
+    if "error" in tool_output_data:
+        return False
+    return True
+
+# Initialize guardrails
+guardrails = Guardrails(
+  input_guards=[PromptInjectionGuard()],
+  output_guards=[ToxicityGuard()],
+  tool_output_guards=[my_tool_output_guard]
+)
+```
+
+Then you can enforce it using `guard_tool_output`:
+
+```python
+# Returns True to allow, False to block
+allowed = guardrails.guard_tool_output(
+    tool_call_data={"tool": "read_file"},
+    tool_output_data="file contents here...",
+    agent_name="user-agent"
+)
+if not allowed:
+    print("Blocked tool output!")
+```
 
 ## Run Async Guardrails
 

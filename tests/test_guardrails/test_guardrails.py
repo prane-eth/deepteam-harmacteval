@@ -158,3 +158,94 @@ class TestGuardrailsIntroduction:
         )
         result = guardrails.guard_input("test input")
         assert result.verdicts == []
+
+    def test_guardrails_tool_input_guard_allow(self):
+        def _my_guard(tool_call, agent):
+            return tool_call.get("name") == "safe_tool"
+
+        guardrails = Guardrails(
+            input_guards=[PromptInjectionGuard()],
+            output_guards=[ToxicityGuard()],
+            tool_input_guards=[_my_guard]
+        )
+        assert guardrails.guard_tool_call({"name": "safe_tool"}, "agent") is True
+
+    def test_guardrails_tool_input_guard_block(self):
+        def _my_guard(tool_call, agent):
+            return tool_call.get("name") == "safe_tool"
+
+        guardrails = Guardrails(
+            input_guards=[PromptInjectionGuard()],
+            output_guards=[ToxicityGuard()],
+            tool_input_guards=[_my_guard]
+        )
+        assert guardrails.guard_tool_call({"name": "unsafe_tool"}, "agent") is False
+
+    def test_guardrails_tool_input_guard_default(self):
+        guardrails = Guardrails(
+            input_guards=[PromptInjectionGuard()],
+            output_guards=[ToxicityGuard()]
+        )
+        assert guardrails.guard_tool_call({"name": "any_tool"}, "agent") is True
+
+    def test_guardrails_tool_input_guard_exception(self):
+        def _my_guard(tool_call, agent):
+            raise ValueError("Something went wrong")
+
+        guardrails = Guardrails(
+            input_guards=[PromptInjectionGuard()],
+            output_guards=[ToxicityGuard()],
+            tool_input_guards=[_my_guard]
+        )
+        assert guardrails.guard_tool_call({"name": "any_tool"}, "agent") is False
+
+    def test_guardrails_multiple_tool_input_guards(self):
+        def _guard_one(tool_call, agent):
+            return tool_call.get("name") == "safe_tool"
+            
+        def _guard_two(tool_call, agent):
+            return agent == "admin"
+            
+        guardrails = Guardrails(
+            input_guards=[PromptInjectionGuard()],
+            output_guards=[ToxicityGuard()],
+            tool_input_guards=[_guard_one, _guard_two]
+        )
+        
+        assert guardrails.guard_tool_call({"name": "safe_tool"}, "admin") is True
+        assert guardrails.guard_tool_call({"name": "unsafe_tool"}, "user") is False
+        assert guardrails.guard_tool_call({"name": "safe_tool"}, "user") is False
+        assert guardrails.guard_tool_call({"name": "unsafe_tool"}, "admin") is False
+
+    def test_guardrails_tool_output_guard_allow(self):
+        def _my_guard(tool_call, tool_output, agent):
+            return tool_output == "success"
+
+        guardrails = Guardrails(
+            input_guards=[PromptInjectionGuard()],
+            output_guards=[ToxicityGuard()],
+            tool_output_guards=[_my_guard]
+        )
+        assert guardrails.guard_tool_output({"name": "safe_tool"}, "success", "agent") is True
+
+    def test_guardrails_tool_output_guard_block(self):
+        def _my_guard(tool_call, tool_output, agent):
+            return tool_output == "success"
+
+        guardrails = Guardrails(
+            input_guards=[PromptInjectionGuard()],
+            output_guards=[ToxicityGuard()],
+            tool_output_guards=[_my_guard]
+        )
+        assert guardrails.guard_tool_output({"name": "safe_tool"}, "error", "agent") is False
+
+    def test_guardrails_tool_output_guard_exception(self):
+        def _my_guard(tool_call, tool_output, agent):
+            raise ValueError("Something went wrong")
+
+        guardrails = Guardrails(
+            input_guards=[PromptInjectionGuard()],
+            output_guards=[ToxicityGuard()],
+            tool_output_guards=[_my_guard]
+        )
+        assert guardrails.guard_tool_output({"name": "any_tool"}, "any_output", "agent") is False
