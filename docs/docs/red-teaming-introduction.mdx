@@ -6,6 +6,9 @@ sidebar_label: Introduction
 
 import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
+import BlogImageDisplayer from "@site/src/components/BlogImageDisplayer";
+import VideoDisplayer from "@site/src/components/VideoDisplayer";
+import { ASSETS } from "@site/src/assets";
 
 `deepteam` offers a powerful yet simple way for anyone to red team all sorts of LLM applications for safety risks and security vulnerabilities in just a few lines of code. These LLM apps can be anything such as RAG pipelines, agents, chatbots, or even just the LLM itself, while the vulnerabilities include ones such as bias, toxicity, PII leakage, misinformation.
 
@@ -155,7 +158,7 @@ red_team(
 )
 ```
 
-For strings, you can pass a model with its provider prefix separated by a `/`. Ex: `google/gemini-2.5-flash`. The available providers that `deepteam` supports are: `openai`, `anthropic`, `google`, `xai`, `moonshotai`, `deepseek`, `ollama`. 
+For strings, you can pass a model with its provider prefix separated by a `/`. Ex: `google/gemini-2.5-flash`. The available providers that `deepteam` supports are: `openai`, `anthropic`, `google`, `xai`, `moonshotai`, `deepseek`, `ollama`.
 
 </TabItem>
 <TabItem value="DeepEval model" label="DeepEval model">
@@ -187,7 +190,7 @@ async def model_callback(input: str, turns: list[RTTurn] = None) -> str:
     # Replace this with your actual LLM application
     # This could be a RAG pipeline, chatbot, agent, etc.
     return RTTurn(
-        role="assistant", 
+        role="assistant",
         content="Your agent's response here...",
         retrieval_context=[
           "Your retieval context here",
@@ -670,6 +673,13 @@ The response evaluation process also involves two key stages:
 
 The attacks are fed into the LLM, and the resulting responses are evaluated using vulnerability-specific metrics based on the types of attacks. **Each vulnerability has a dedicated metric** designed to assess whether that particular weakness has been effectively exploited, providing a precise evaluation of the LLM's performance in mitigating each specific risk.
 
-:::tip
 It's worth noting that using a synthesizer model like GPT-3.5 can prove more effective than GPT-4o, as more **advanced models tend to have stricter filtering mechanisms**, which can limit the successful generation of adversarial attacks.
+
+:::note Red Team on Confident AI
+[Confident AI](https://www.confident-ai.com) lets you run red teaming on the cloud — configure frameworks like OWASP or MITRE ATLAS, schedule recurring risk assessments, manage vulnerabilities in one place, and share PDF reports with your team for security alignment.
+
+<BlogImageDisplayer
+  src={ASSETS.confidentRedTeamingRiskAssessment}
+  alt="Risk assessment dashboard in Confident AI"
+/>
 :::

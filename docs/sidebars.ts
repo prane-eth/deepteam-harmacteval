@@ -85,7 +85,7 @@ module.exports = {
     },
     {
       type: "category",
-      label: "Vulnerabilties",
+      label: "Vulnerabilities",
       className: "sidebar-item-vulnerabilities root-sidebar-item",
       items: [
         "red-teaming-vulnerabilities",

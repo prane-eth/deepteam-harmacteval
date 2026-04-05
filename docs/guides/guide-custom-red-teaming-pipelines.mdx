@@ -22,10 +22,15 @@ Red teaming usually starts with a vulnerability. It allows us to choose the basi
 Below is an image that shows the flow of a red teaming process:
 
 ```mermaid
-graph LR
-    BV[Base vulnerability] -->|Baseline attack| AA[Adversarial attack]
-    AA -->|Test cases| VM[Vulnerability metric]
-    VM -->|Metric results| RA[Risk Assessment]
+sequenceDiagram
+    participant BV as Base Vulnerability
+    participant AA as Adversarial Attack
+    participant VM as Vulnerability Metric
+    participant RA as Risk Assessment
+
+    BV->>AA: Baseline attack
+    AA->>VM: Test cases
+    VM->>RA: Metric results
 ```
 
 The base vulnerabilities generates harmful prompts called baseline attacks, these attacks are then enhanced or progressed using the adversarial attack techniques, which allow us to create test cases that can be used to evaluate whether your LLM application has successfully avoided producing harmful outputs.
@@ -157,7 +162,7 @@ from deepteam.test_case import RTTurn
 
 async def model_callback(input: str, turns: list[RTTurn] = None) -> str:
     # Replace this with your actual LLM application
-    # This could be a RAG pipeline, chatbot, agent, etc.
+    # This could be an agentic RAG pipeline, conversational agent, AI agent, etc.
     return RTTurn(role="assistant", content="Your agent's response here...")
 ```
 :::

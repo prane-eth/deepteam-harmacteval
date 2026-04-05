@@ -4,6 +4,10 @@ title: NIST AI RMF
 sidebar_label: NIST AI RMF
 ---
 
+import BlogImageDisplayer from "@site/src/components/BlogImageDisplayer";
+import VideoDisplayer from "@site/src/components/VideoDisplayer";
+import { ASSETS } from "@site/src/assets";
+
 The **NIST AI Risk Management Framework (AI RMF)** is a structured methodology from the U.S. National Institute of Standards and Technology that guides organizations in identifying, evaluating, and mitigating risks in artificial intelligence systems.
 It promotes **trustworthy AI** by focusing on governance, measurement, and continuous risk tracking across the AI lifecycle.
 
@@ -22,6 +26,16 @@ The framework is divided into four categories of measures:
 | **Measure 2**    | Evaluate the AI system for trustworthiness, safety, security, fairness, and misuse potential |
 | **Measure 3**    | Establish mechanisms for identifying, tracking, and managing emerging risks                  |
 | **Measure 4**    | Measure and correlate AI risk impacts with business and performance outcomes                 |
+
+:::tip
+You can also run this assessment in the Confident AI platform without any code.
+
+<VideoDisplayer
+  src={ASSETS.redTeamingOwaspTop10LlmPlatformVideo}
+  confidentUrl="/docs/red-teaming/no-code-assessments/quickstart"
+  label="Learn how to run framework assessments on Confident AI"
+/>
+:::
 
 ## Using the NIST Framework in DeepTeam
 
@@ -254,6 +268,16 @@ risk_assessment = red_team(
 ```
 
 This category ensures AI systems not only measure risks effectively but also **close the feedback loop** by aligning transparency, accountability, and business value.
+
+:::info Run NIST AI RMF Assessments on Confident AI
+[Confident AI](https://www.confident-ai.com) lets you configure the NIST AI RMF framework, schedule recurring risk assessments, manage vulnerabilities in one place, and share downloadable PDF reports with your team for security alignment.
+
+<BlogImageDisplayer
+  src={ASSETS.confidentRedTeamingRiskAssessment}
+  alt="Risk assessment overview in Confident AI after a framework-based assessment"
+  caption="Example: consolidated risk assessment in Confident AI after running a framework-based assessment."
+/>
+:::
 
 ## Best Practices
 

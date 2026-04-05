@@ -4,6 +4,10 @@ title: OWASP Top 10 for Agents 2026
 sidebar_label: OWASP Top 10 for Agents 2026
 ---
 
+import BlogImageDisplayer from "@site/src/components/BlogImageDisplayer";
+import VideoDisplayer from "@site/src/components/VideoDisplayer";
+import { ASSETS } from "@site/src/assets";
+
 The **OWASP Top 10 for Agentic Applications (ASI)** identifies the most critical security risks introduced by autonomous and semi-autonomous AI agents. Unlike traditional LLM applications, agentic systems combine reasoning, memory, tools, and multi-step execution, introducing new classes of vulnerabilities that extend beyond prompt-level attacks.
 
 The 2026 edition focuses on failures arising from goal misalignment, tool misuse, delegated trust, inter-agent communication, persistent memory, and emergent autonomous behavior.
@@ -21,6 +25,13 @@ risk_assessment = red_team(
 )
 ```
 
+You can also run this assessment in the Confident AI platform without any code.
+
+<VideoDisplayer
+  src={ASSETS.redTeamingOwaspTop10LlmPlatformVideo}
+  confidentUrl="/docs/red-teaming/framework-policies"
+  label="Learn how to run framework assessments on Confident AI"
+/>
 :::
 
 ## What Makes Agentic AI Different
@@ -399,6 +410,16 @@ critical_assessment = red_team(
     attacks_per_vulnerability_type=10
 )
 ```
+
+:::info Run OWASP ASI Assessments on Confident AI
+[Confident AI](https://www.confident-ai.com) lets you configure the OWASP ASI framework, schedule recurring risk assessments, manage vulnerabilities in one place, and share downloadable PDF reports with your team for security alignment.
+
+<BlogImageDisplayer
+  src={ASSETS.confidentRedTeamingRiskAssessment}
+  alt="Risk assessment overview in Confident AI after a framework-based assessment"
+  caption="Example: consolidated risk assessment in Confident AI after running a framework-based assessment."
+/>
+:::
 
 ## Best Practices for Agentic AI Security
 

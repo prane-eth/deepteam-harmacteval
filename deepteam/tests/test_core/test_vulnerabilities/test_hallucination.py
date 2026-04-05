@@ -6,9 +6,16 @@ from deepteam.test_case import RTTestCase
 
 class TestHallucination:
     def test_hallucination_all_types(self):
-        types = ["fake_citations", "fake_apis", "fake_entities", "fake_statistics"]
+        types = [
+            "fake_citations",
+            "fake_apis",
+            "fake_entities",
+            "fake_statistics",
+        ]
         hallucination = Hallucination(types=types)
-        assert sorted(type.value for type in hallucination.types) == sorted(types)
+        assert sorted(type.value for type in hallucination.types) == sorted(
+            types
+        )
 
     def test_hallucination_all_types_default(self):
         hallucination = Hallucination()
@@ -19,22 +26,30 @@ class TestHallucination:
     def test_hallucination_fake_citations(self):
         types = ["fake_citations"]
         hallucination = Hallucination(types=types)
-        assert sorted(type.value for type in hallucination.types) == sorted(types)
+        assert sorted(type.value for type in hallucination.types) == sorted(
+            types
+        )
 
     def test_hallucination_fake_apis(self):
         types = ["fake_apis"]
         hallucination = Hallucination(types=types)
-        assert sorted(type.value for type in hallucination.types) == sorted(types)
+        assert sorted(type.value for type in hallucination.types) == sorted(
+            types
+        )
 
     def test_hallucination_fake_entities(self):
         types = ["fake_entities"]
         hallucination = Hallucination(types=types)
-        assert sorted(type.value for type in hallucination.types) == sorted(types)
+        assert sorted(type.value for type in hallucination.types) == sorted(
+            types
+        )
 
     def test_hallucination_fake_statistics(self):
         types = ["fake_statistics"]
         hallucination = Hallucination(types=types)
-        assert sorted(type.value for type in hallucination.types) == sorted(types)
+        assert sorted(type.value for type in hallucination.types) == sorted(
+            types
+        )
 
     def test_hallucination_invalid_type(self):
         types = ["fake_citations", "invalid_type"]
@@ -43,7 +58,9 @@ class TestHallucination:
 
     def test_simulate_attacks_returns_expected_cases(self):
         hallucination = Hallucination(types=["fake_citations"])
-        test_cases = hallucination.simulate_attacks(attacks_per_vulnerability_type=2)
+        test_cases = hallucination.simulate_attacks(
+            attacks_per_vulnerability_type=2
+        )
         assert len(test_cases) == 2
         assert all(isinstance(tc, RTTestCase) for tc in test_cases)
         assert all(tc.vulnerability == "Hallucination" for tc in test_cases)
@@ -76,6 +93,7 @@ class TestHallucination:
 
     def test_get_metric_returns_hallucination_metric(self):
         from deepteam.metrics import HallucinationMetric
+
         hallucination = Hallucination(
             async_mode=True, verbose_mode=True, evaluation_model="gpt-4o"
         )

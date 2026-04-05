@@ -1,7 +1,7 @@
-import type { Config } from '@docusaurus/types';
-import type * as Preset from '@docusaurus/preset-classic';
-import remarkMath from 'remark-math';
-import rehypeKatex from 'rehype-katex';
+import type { Config } from "@docusaurus/types";
+import type * as Preset from "@docusaurus/preset-classic";
+import remarkMath from "remark-math";
+import rehypeKatex from "rehype-katex";
 
 const config: Config = {
   plugins: [
@@ -24,7 +24,7 @@ const config: Config = {
         id: "blogs",
         path: "blog",
         routeBasePath: "blog",
-        blogSidebarCount: 0
+        blogSidebarCount: 0,
       },
     ],
   ],
@@ -37,32 +37,32 @@ const config: Config = {
   baseUrl: "/",
 
   onBrokenLinks: "warn",
-  
+
   headTags: [
     {
-      tagName: 'meta',
+      tagName: "meta",
       attributes: {
-        name: 'algolia-site-verification',
-        content: '0BD7859165065E7F',
+        name: "algolia-site-verification",
+        content: "0BD7859165065E7F",
       },
     },
     // GEO / SEO Organization Schema injected here
     {
-      tagName: 'script',
+      tagName: "script",
       attributes: {
-        type: 'application/ld+json',
+        type: "application/ld+json",
       },
       innerHTML: JSON.stringify({
         "@context": "https://schema.org",
         "@type": "Organization",
-        "name": "DeepTeam by Confident AI",
-        "alternateName": "DeepTeam - The LLM Security and Red Teaming Framework",
-        "url": "https://trydeepteam.com",
-        "logo": "https://trydeepteam.com/icons/DeepTeam.svg",
-        "sameAs": [
+        name: "DeepTeam by Confident AI",
+        alternateName: "DeepTeam - The LLM Security and Red Teaming Framework",
+        url: "https://trydeepteam.com",
+        logo: "https://trydeepteam.com/icons/DeepTeam.svg",
+        sameAs: [
           "https://github.com/confident-ai/deepteam",
-          "https://discord.gg/3SEyvpgu2f"
-        ]
+          "https://discord.gg/3SEyvpgu2f",
+        ],
       }),
     },
   ],
@@ -96,12 +96,12 @@ const config: Config = {
       } satisfies Preset.Options,
     ],
   ],
-  themes: ['@docusaurus/theme-mermaid'],
+  themes: ["@docusaurus/theme-mermaid"],
   markdown: {
     mermaid: true,
     hooks: {
       onBrokenMarkdownLinks: "warn",
-    }
+    },
   },
   scripts: [
     {
@@ -139,15 +139,15 @@ const config: Config = {
           to: "docs/getting-started",
           position: "left",
           label: "Docs",
-          activeBasePath: 'docs',
+          activeBasePath: "docs",
         },
         {
-          to: "guides/guide-custom-vulnerability",
+          to: "guides/guide-agentic-ai-red-teaming",
           position: "left",
           label: "Guides",
           activeBasePath: "guides",
         },
-        { to: 'blog', label: 'Blog', position: 'left' },
+        { to: "blog", label: "Blog", position: "left" },
         {
           href: "https://discord.gg/3SEyvpgu2f",
           className: "header-discord-link",
@@ -190,7 +190,7 @@ const config: Config = {
             },
             {
               label: "Guides",
-              to: "/guides/guide-custom-vulnerability",
+              to: "guides/guide-agentic-ai-red-teaming",
             },
           ],
         },
@@ -203,15 +203,15 @@ const config: Config = {
             },
             {
               label: "OWASP Top 10 for LLMs",
-              to: "https://www.confident-ai.com/blog/owasp-top-10-2025-for-llm-applications-risks-and-mitigation-techniques"
+              to: "https://www.confident-ai.com/blog/owasp-top-10-2025-for-llm-applications-risks-and-mitigation-techniques",
             },
             {
               label: "The comprehensive LLM safety guide",
-              to: "https://www.confident-ai.com/blog/the-comprehensive-llm-safety-guide-navigate-ai-regulations-and-best-practices-for-llm-safety"
+              to: "https://www.confident-ai.com/blog/the-comprehensive-llm-safety-guide-navigate-ai-regulations-and-best-practices-for-llm-safety",
             },
             {
               label: "LLM evaluation metrics",
-              to: "https://www.confident-ai.com/blog/llm-evaluation-metrics-everything-you-need-for-llm-evaluation"
+              to: "https://www.confident-ai.com/blog/llm-evaluation-metrics-everything-you-need-for-llm-evaluation",
             },
           ],
         },

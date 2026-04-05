@@ -179,10 +179,15 @@ for test_case in test_cases:
 The base attack in your test cases are first enhanced using roleplay, this attack now disguised as roleplay is then enhanced using prompt injection again. This makes the base attack already sophisticated enough, however, the prompt injected attack is then encoded using the leetspeak technique making this attack even more powerful.
 
 ```mermaid
-flowchart LR
-    BA[Base attack] --> RP[Roleplay]
-    RP --> PI[Prompt Injection]
-    PI --> LS[Leetspeak]
+sequenceDiagram
+    participant BA as Base Attack
+    participant RP as Roleplay
+    participant PI as Prompt Injection
+    participant LS as Leetspeak
+
+    BA->>RP: Enhance
+    RP->>PI: Enhance
+    PI->>LS: Enhance
 ```
 
 This allows you to _test, iterate, and improve_ attacks to find hidden vulnerabilities in your LLM applications.
@@ -213,7 +218,7 @@ from deepteam.test_case import RTTurn
 
 async def model_callback(input: str, turns: list[RTTurn] = None) -> str:
     # Replace this with your actual LLM application
-    # This could be a RAG pipeline, chatbot, agent, etc.
+    # This could be an agentic RAG pipeline, conversational agent, AI agent, etc.
     return RTTurn(role="assistant", content="Your agent's response here...")
 ```
 :::
@@ -292,10 +297,15 @@ The `_get_turns` method has **ONE** mandatory and **THREE** optional parameters:
 The base attack in your test cases are first enhanced using roleplay, this attack now disguised as roleplay is then used as the first turn to progress the attack from. After getting new turns that are already _ready to be evaluated_ (Most LLM applications already fail here). You can still use these new turns to progress them even further with another multi-turn progression technique.
 
 ```mermaid
-flowchart LR
-    BA[Base attack] --> RP[Roleplay]
-    RP --> LJ[Linear jailbreaking progressions ]
-    LJ --> SJ[Sequential Jailbreaking progressions ]
+sequenceDiagram
+    participant BA as Base Attack
+    participant RP as Roleplay
+    participant LJ as Linear Jailbreaking
+    participant SJ as Sequential Jailbreaking
+
+    BA->>RP: Enhance
+    RP->>LJ: Progress
+    LJ->>SJ: Progress
 ```
 
 Now, [evaluate these test cases](#evaluating-test-cases) to see if your LLM application passes the vulnerability you've chosen when using multi-turn progressions.

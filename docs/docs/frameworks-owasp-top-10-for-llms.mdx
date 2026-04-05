@@ -4,6 +4,10 @@ title: OWASP Top 10 for LLMs 2025
 sidebar_label: OWASP Top 10 for LLMs 2025
 ---
 
+import BlogImageDisplayer from "@site/src/components/BlogImageDisplayer";
+import VideoDisplayer from "@site/src/components/VideoDisplayer";
+import { ASSETS } from "@site/src/assets";
+
 The **OWASP Top 10 for Large Language Models (LLMs)** is a comprehensive list of the most critical security risks associated with LLM applications. This resource is designed to help developers, security professionals, and organizations identify, understand, and mitigate vulnerabilities in these systems, ensuring safer and more robust deployments in real-world applications.
 
 The 2025 edition reflects significant evolution in the LLM threat landscape, with new risks emerging from RAG systems, autonomous AI agents, and sophisticated attack methods.
@@ -20,6 +24,14 @@ risk_assessment = red_team(
     framework=OWASPTop10()
 )
 ```
+
+You can also run this assessment in the Confident AI platform without any code.
+
+<VideoDisplayer
+  src={ASSETS.redTeamingOwaspTop10LlmPlatformVideo}
+  confidentUrl="/docs/red-teaming/no-code-assessments/quickstart"
+  label="Learn how to run framework assessments on Confident AI"
+/>
 
 :::
 
@@ -380,6 +392,16 @@ owasp_assessment = red_team(
 print(f"Total test cases: {len(owasp_assessment.test_cases)}")
 print(f"Pass rate: {owasp_assessment.pass_rate:.1%}")
 ```
+
+:::note Run OWASP Assessments on Confident AI
+[Confident AI](https://www.confident-ai.com) lets you configure the OWASP Top 10 framework, schedule recurring risk assessments, manage vulnerabilities in one place, and share downloadable PDF reports with your team for security alignment.
+
+<BlogImageDisplayer
+  src={ASSETS.confidentRedTeamingRiskAssessment}
+  alt="Risk assessment overview in Confident AI after an OWASP-style framework run"
+  caption="Example: consolidated risk assessment in Confident AI after running a framework-based assessment."
+/>
+:::
 
 ## Best Practices
 

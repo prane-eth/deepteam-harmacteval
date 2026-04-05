@@ -60,79 +60,78 @@ DeepTeam runs **locally on your machine** and uses LLMs for both attack simulati
   - <details>
     <summary><b>Data Privacy</b></summary>
 
-    - PII Leakage — direct disclosure, session leak, database access
-    - Prompt Leakage — secrets, credentials, system prompt extraction
+    - [PII Leakage](https://www.trydeepteam.com/docs/red-teaming-vulnerabilities-pii-leakage) — disclosure of sensitive personal information
+    - [Prompt Leakage](https://www.trydeepteam.com/docs/red-teaming-vulnerabilities-prompt-leakage) — exposure of system prompt secrets and instructions
 
     </details>
 
   - <details>
     <summary><b>Responsible AI</b></summary>
 
-    - Bias — gender, race, political, religion
-    - Toxicity — profanity, insults, threats
-    - Child Protection — CSAM, grooming
-    - Ethics — moral violations
-    - Fairness — discriminatory outcomes
+    - [Bias](https://www.trydeepteam.com/docs/red-teaming-vulnerabilities-bias) — stereotypes and unfair treatment across gender, race, religion, politics
+    - [Toxicity](https://www.trydeepteam.com/docs/red-teaming-vulnerabilities-toxicity) — harmful, offensive, or demeaning content
+    - [Child Protection](https://www.trydeepteam.com/docs/red-teaming-vulnerabilities-child-protection) — child-related privacy and safety risks
+    - [Ethics](https://www.trydeepteam.com/docs/red-teaming-vulnerabilities-ethics) — violations of moral reasoning and organizational values
+    - [Fairness](https://www.trydeepteam.com/docs/red-teaming-vulnerabilities-fairness) — discriminatory outcomes across groups and contexts
 
     </details>
 
   - <details>
     <summary><b>Security</b></summary>
 
-    - BFLA — broken function-level authorization
-    - BOLA — broken object-level authorization
-    - RBAC — role-based access control bypass
-    - Debug Access — development endpoint exposure
-    - Shell Injection — command execution attacks
-    - SQL Injection — database query manipulation
-    - SSRF — server-side request forgery
-    - Tool Metadata Poisoning — corrupting tool descriptions
-    - Cross-Context Retrieval — accessing data across boundaries
-    - System Reconnaissance — probing agent architecture
+    - [BFLA](https://www.trydeepteam.com/docs/red-teaming-vulnerabilities-bfla) — broken function-level authorization
+    - [BOLA](https://www.trydeepteam.com/docs/red-teaming-vulnerabilities-bola) — broken object-level authorization
+    - [RBAC](https://www.trydeepteam.com/docs/red-teaming-vulnerabilities-rbac) — role-based access control bypass
+    - [Debug Access](https://www.trydeepteam.com/docs/red-teaming-vulnerabilities-debug-access) — unauthorized access to debug modes and dev endpoints
+    - [Shell Injection](https://www.trydeepteam.com/docs/red-teaming-vulnerabilities-shell-injection) — unauthorized system command execution
+    - [SQL Injection](https://www.trydeepteam.com/docs/red-teaming-vulnerabilities-sql-injection) — database query manipulation
+    - [SSRF](https://www.trydeepteam.com/docs/red-teaming-vulnerabilities-ssrf) — server-side request forgery to internal services
+    - [Tool Metadata Poisoning](https://www.trydeepteam.com/docs/red-teaming-vulnerabilities-tool-metadata-poisoning) — corrupted tool schemas and descriptions
+    - [Cross-Context Retrieval](https://www.trydeepteam.com/docs/red-teaming-vulnerabilities-cross-context-retrieval) — data access across isolation boundaries
+    - [System Reconnaissance](https://www.trydeepteam.com/docs/red-teaming-vulnerabilities-system-reconnaissance) — probing internal architecture and configurations
 
     </details>
 
   - <details>
     <summary><b>Safety</b></summary>
 
-    - Illegal Activity — fraud, weapons, drugs
-    - Graphic Content — violence, sexual content
-    - Personal Safety — self-harm, dangerous advice
-    - Unexpected Code Execution — arbitrary code generation
-    - HarmActionsEval — agentic evaluation of harmful actions
+    - [Illegal Activity](https://www.trydeepteam.com/docs/red-teaming-vulnerabilities-illegal-activity) — facilitation of fraud, weapons, drugs, or other unlawful actions
+    - [Graphic Content](https://www.trydeepteam.com/docs/red-teaming-vulnerabilities-graphic-content) — explicit, violent, or sexual material
+    - [Personal Safety](https://www.trydeepteam.com/docs/red-teaming-vulnerabilities-personal-safety) — self-harm, harassment, or dangerous advice
+    - [Unexpected Code Execution](https://www.trydeepteam.com/docs/red-teaming-vulnerabilities-unexpected-code-execution) — coerced execution of unauthorized code
 
     </details>
 
   - <details>
     <summary><b>Business</b></summary>
 
-    - Misinformation — factual errors, unsupported claims
-    - Intellectual Property — copyright violations
-    - Competition — competitor endorsement
+    - [Misinformation](https://www.trydeepteam.com/docs/red-teaming-vulnerabilities-misinformation) — factual errors and unsupported claims
+    - [Intellectual Property](https://www.trydeepteam.com/docs/red-teaming-vulnerabilities-intellectual-property) — copyright, trademark, and patent violations
+    - [Competition](https://www.trydeepteam.com/docs/red-teaming-vulnerabilities-competition) — competitor endorsement and market manipulation
 
     </details>
 
   - <details>
     <summary><b>Agentic</b></summary>
 
-    - Goal Theft — extracting or redirecting an agent's objectives
-    - Recursive Hijacking — exploiting recursive agent calls
-    - Excessive Agency — agents acting beyond their authority
-    - Robustness — input overreliance, hijacking
-    - Indirect Instruction — hidden instructions in retrieved content
-    - Tool Orchestration Abuse — exploiting tool calling sequences
-    - Agent Identity & Trust Abuse — impersonating agent identity
-    - Inter-Agent Communication Compromise — exploiting multi-agent message passing
-    - Autonomous Agent Drift — agents deviating from intended goals
-    - Exploit Tool Agent — leveraging tools for unintended actions
-    - External System Abuse — using agents to attack external services
+    - [Goal Theft](https://www.trydeepteam.com/docs/red-teaming-agentic-vulnerabilities-goal-theft) — extracting or redirecting an agent's objectives
+    - [Recursive Hijacking](https://www.trydeepteam.com/docs/red-teaming-agentic-vulnerabilities-recursive-hijacking) — self-modifying goal chains that alter objectives
+    - [Excessive Agency](https://www.trydeepteam.com/docs/red-teaming-vulnerabilities-excessive-agency) — agents acting beyond their authority
+    - [Robustness](https://www.trydeepteam.com/docs/red-teaming-vulnerabilities-robustness) — input overreliance and prompt hijacking
+    - [Indirect Instruction](https://www.trydeepteam.com/docs/red-teaming-vulnerabilities-indirect-instruction) — hidden instructions in retrieved content
+    - [Tool Orchestration Abuse](https://www.trydeepteam.com/docs/red-teaming-vulnerabilities-tool-orchestration-abuse) — exploiting tool calling sequences
+    - [Agent Identity & Trust Abuse](https://www.trydeepteam.com/docs/red-teaming-vulnerabilities-agent-identity-abuse) — impersonating agent identity
+    - [Inter-Agent Communication Compromise](https://www.trydeepteam.com/docs/red-teaming-vulnerabilities-inter-agent-communication-compromise) — spoofing multi-agent message passing
+    - [Autonomous Agent Drift](https://www.trydeepteam.com/docs/red-teaming-vulnerabilities-autonomous-agent-drift) — agents deviating from intended goals over time
+    - [Exploit Tool Agent](https://www.trydeepteam.com/docs/red-teaming-vulnerabilities-exploit-tool-agent) — weaponizing tools for unintended actions
+    - [External System Abuse](https://www.trydeepteam.com/docs/red-teaming-vulnerabilities-external-system-abuse) — using agents to attack external services
 
     </details>
 
   - <details>
     <summary><b>Custom</b></summary>
 
-    - Custom Vulnerabilities — define and test your own with custom criteria in a few lines of code
+    - [Custom Vulnerabilities](https://www.trydeepteam.com/docs/red-teaming-custom-vulnerability) — define and test your own criteria in a few lines of code
 
     </details>
 
@@ -141,39 +140,39 @@ DeepTeam runs **locally on your machine** and uses LLMs for both attack simulati
   - <details>
     <summary><b>Single-Turn</b></summary>
 
-    - Prompt Injection
-    - Roleplay
-    - Leetspeak
-    - ROT13
-    - Base64
-    - Gray Box
-    - Math Problem
-    - Multilingual
-    - Prompt Probing
-    - Adversarial Poetry
-    - System Override
-    - Permission Escalation
-    - Goal Redirection
-    - Linguistic Confusion
-    - Input Bypass
-    - Context Poisoning
-    - Character Stream
-    - Context Flooding
-    - Embedded Instruction JSON
-    - Synthetic Context Injection
-    - Authority Escalation
-    - Emotional Manipulation
+    - [Prompt Injection](https://www.trydeepteam.com/docs/red-teaming-adversarial-attacks-prompt-injection) — crafted injections that bypass LLM restrictions
+    - [Roleplay](https://www.trydeepteam.com/docs/red-teaming-adversarial-attacks-roleplay) — persona-based scenarios exploiting collaborative training
+    - [Leetspeak](https://www.trydeepteam.com/docs/red-teaming-adversarial-attacks-leetspeak) — symbolic character substitution to avoid keyword detection
+    - [ROT13](https://www.trydeepteam.com/docs/red-teaming-adversarial-attacks-rot13-encoding) — alphabetic rotation to evade content filters
+    - [Base64](https://www.trydeepteam.com/docs/red-teaming-adversarial-attacks-base64-encoding) — encoding attacks as random-looking data
+    - [Gray Box](https://www.trydeepteam.com/docs/red-teaming-adversarial-attacks-gray-box-attack) — leveraging partial system knowledge for targeted attacks
+    - [Math Problem](https://www.trydeepteam.com/docs/red-teaming-adversarial-attacks-math-problem) — disguising attacks within mathematical inputs
+    - [Multilingual](https://www.trydeepteam.com/docs/red-teaming-adversarial-attacks-multilingual) — translating attacks to less-spoken languages
+    - Prompt Probing — probing the LLM to extract system prompt details
+    - [Adversarial Poetry](https://www.trydeepteam.com/docs/red-teaming-adversarial-attacks-adversarial-poetry) — transforming attacks into poetic verse with metaphor
+    - [System Override](https://www.trydeepteam.com/docs/red-teaming-agentic-attacks-system-override) — disguising attacks as legitimate system commands
+    - [Permission Escalation](https://www.trydeepteam.com/docs/red-teaming-agentic-attacks-permission-escalation) — shifting perceived identity to bypass role restrictions
+    - [Goal Redirection](https://www.trydeepteam.com/docs/red-teaming-agentic-attacks-goal-redirection) — reframing agent objectives for unauthorized outcomes
+    - [Linguistic Confusion](https://www.trydeepteam.com/docs/red-teaming-agentic-attacks-semantic-manipulation) — semantic ambiguity to confuse language understanding
+    - [Input Bypass](https://www.trydeepteam.com/docs/red-teaming-agentic-attacks-input-bypass) — circumventing validation via exception handling claims
+    - [Context Poisoning](https://www.trydeepteam.com/docs/red-teaming-agentic-attacks-context-poisoning) — injecting false background context to bias reasoning
+    - [Character Stream](https://www.trydeepteam.com/docs/red-teaming-adversarial-attacks-character-stream) — character-by-character input to bypass filters
+    - [Context Flooding](https://www.trydeepteam.com/docs/red-teaming-adversarial-attacks-context-flooding) — flooding input with benign text to hide malicious instructions
+    - [Embedded Instruction JSON](https://www.trydeepteam.com/docs/red-teaming-adversarial-attacks-embedded-instruction-json) — hiding attacks inside realistic JSON structures
+    - [Synthetic Context Injection](https://www.trydeepteam.com/docs/red-teaming-adversarial-attacks-synthetic-context-injection) — fabricating system context to exploit long-context handling
+    - [Authority Escalation](https://www.trydeepteam.com/docs/red-teaming-adversarial-attacks-authority-escalation) — framing requests from positions of power
+    - [Emotional Manipulation](https://www.trydeepteam.com/docs/red-teaming-adversarial-attacks-emotional-manipulation) — high-intensity emotional pressure for unsafe compliance
 
     </details>
 
   - <details>
     <summary><b>Multi-Turn</b></summary>
 
-    - Linear Jailbreaking
-    - Tree Jailbreaking
-    - Crescendo Jailbreaking
-    - Sequential Jailbreak
-    - Bad Likert Judge
+    - [Linear Jailbreaking](https://www.trydeepteam.com/docs/red-teaming-adversarial-attacks-linear-jailbreaking) — iteratively refining attacks using target LLM responses
+    - [Tree Jailbreaking](https://www.trydeepteam.com/docs/red-teaming-adversarial-attacks-tree-jailbreaking) — exploring parallel attack variations to find the best bypass
+    - [Crescendo Jailbreaking](https://www.trydeepteam.com/docs/red-teaming-adversarial-attacks-crescendo-jailbreaking) — gradual escalation from benign to harmful prompts
+    - [Sequential Jailbreak](https://www.trydeepteam.com/docs/red-teaming-adversarial-attacks-sequential-jailbreaking) — multi-turn conversational scaffolding toward restricted outputs
+    - [Bad Likert Judge](https://www.trydeepteam.com/docs/red-teaming-adversarial-attacks-bad-likert-judge) — exploiting Likert scale evaluation roles to extract harmful content
 
     </details>
 
